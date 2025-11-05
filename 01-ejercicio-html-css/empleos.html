@@ -1,106 +1,177 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <title>CarJobs - Empleos</title>
+    <!-- Siempre es bueno agregar una descripción de la página para mejorar el SEO -->
+    <meta name="description" content="CarJobs es un sitio web que permite buscar empleos en el sector tecnológico">
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width">
     <!--<script type="module" src="/00-html-css/scripts/scripts.js"></script>-->
-    
+
 </head>
+
 <body class="jobs-search">
     <header>
-        <h2>CarJobs</h2>
+        <h1>CarJobs</h1>
 
         <nav>
-            <a href="index.html" >Inicio</a>
+            <a href="index.html">Inicio</a>
             <a href="empleos.html">Empleos</a>
-            <a href="empleos.html">Empresas</a>
-            <a href="empleos.html">Salarios</a>
+            <!-- Cuando todavía no tenemos el link correcto, podemos usar el símbolo # para identificarlo -->
+            <a href="#">Empresas</a>
+            <a href="#">Salarios</a>
         </nav>
         <div>
-            <a href="">Subir CV</a>
-            <img src="perfil.jpeg" alt="">
+            <a href="#">Subir CV</a>
+            <!-- Cuando manejamos imágenes, es bueno agregar los atributos width y height, para mantener la relación de aspecto mientras la imagen cargue. Y por otro lado agregar el atributo `alt` para que los lectores de pantalla puedan saber qué imagen es -->
+            <img src="perfil.jpeg" alt="Perfil de usuario" width="50" height="50">
         </div>
     </header>
-<main>
-    <h1>Encuentra tu próximo trabajo</h1>
-    <p class="sty">Explora miles de oportunidades en el sector tecnológico.</p>
-    <section>
-        <form role="search">
-            <div>
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#a09fdf"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
-            <input type="text" placeholder= "Buscar trabajos, empresas o habilidades"> 
-            <button id="" hidden type="submit">Buscar</button>
-            </div>    
-        </form>   
-        <form class="aling-left">
-            <select name="" id="">
-                <option value="">Tecnología</option>
-            </select>
-            <select name="" id="">
-                <option value="">Ubicación</option>
-            </select>
-            <select name="" id="">
-                <option value="">Tipo de contrato</option>
-            </select>
-            <select name="" id="">
-                <option value="">Nivel de experiencia</option>
-            </select>
-        </form> 
-        </nav>
+    <main>
+        <!-- La página se divide en dos secciones, la primera es el formulario de búsqueda y la segunda es la lista de resultados -->
+        <section>
+            <h1>Encuentra tu próximo trabajo</h1>
+            <p class="sty">Explora miles de oportunidades en el sector tecnológico.</p>
+            <form role="search">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="#a09fdf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-search">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                        <path d="M21 21l-6 -6" />
+                    </svg>
+                    <input type="text" placeholder="Buscar trabajos, empresas o habilidades">
+                    <button id="" hidden type="submit">Buscar</button>
+                </div>
+            </form>
+            <form class="aling-left">
+                <select name="tecnologia" id="">
+                    <option value="">Tecnología</option>
+                    <option value="react">React</option>
+                    <option value="node">Node.js</option>
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                </select>
+                <select name="ubicacion" id="">
+                    <option value="">Ubicación</option>
+                    <option value="remoto">Remoto</option>
+                    <option value="presencial">Presencial</option>
+                    <option value="híbrido">Híbrido</option>
+                </select>
+                <select name="contrato" id="">
+                    <option value="">Tipo de contrato</option>
+                    <option value="fijo">Fijo</option>
+                    <option value="temporal">Temporal</option>
+                    <option value="contrato">Contrato</option>
+                </select>
+                <select name="experiencia" id="">
+                    <option value="">Nivel de experiencia</option>
+                    <option value="junior">Junior</option>
+                    <option value="medio">Medio</option>
+                    <option value="senior">Senior</option>
+                </select>
+            </form>
         </section>
-        <section   class="resultados">
+        <section class="resultados">
             <h2>Resultados de búsqueda</h2>
-            <section>
-                <article>
-                    <div>
-                    <h3><a href="detalles.html">Ingeniero de Software</a></h3>
-                    <button class="button-apply-job" type="submit" id="boton-importante">Aplicar</button>
-                    </div>
-                    <small>Tech Solutions Inc. | Remoto</small>
-                    <p>Buscamos un ingeniero de software con experiencia en desarrollo web y conocimientos en JavaScript, React y Node.js. EI candidato
-                    ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de comunicación.</p>
-                    
-                </article>
-                <article>
-                    <div>
-                    <h3>Analista de Datos</h3>
-                    <button class="button-apply-job" type="submit">Aplicar</button>
-                    </div>
-                    <small>Data Driven Co. | Ciudad de México</small>
-                    <p>Estamos buscando un analista de datos con experiencia en el manejo de grandes conjuntos de datos y herramientas de
-                    visualización. Se requiere conocimiento en SQL, Python y R.</p>
-                </article>
-                <article>
-                    <div>
-                    <h3>Desarrollador de Aplicaciones Móviles</h3>
-                    <button class="button-apply-job" type="submit">Aplicar</button>
-                    </div>
-                    <small>Mobile Apps Ltd. | Guadalajara</small>
-                    <p>Buscamos un desarrollador de aplicaciones móviles con experiencia en iOS y/o Android. EI candidato debe tener conocimientos en
-                    Swift, Kotlin y eI desarrollo de interfaces de usuario.</p>
-                </article>
-                <article>
-                    <div>
-                    <h3>Ingeniero de DevOps</h3>
-                    <button class="button-apply-job" type="submit">Aplicar</button>
-                    </div>
-                    <small>Cloud Services SA | Guadalajara</small>
-                    <p>Estamos buscando un ingeniero de DevOps con experiencia en la gestión de infraestructuras en la nube, automatización de
-                    procesos y herramientas de integración continua. Se requiere conocimiento en AWS, Azure o GCP.</p>
-                </article>
-            </section>
+            <!-- Los empleos se pueden intepretar como una lista de resultados -->
+            <ul>
+                <li>
+                    <article>
+                        <div>
+                            <!-- Un heading (h1, h2, h3, etc.) no puede contener un anchor, esto debe ser al revés -->
+                            <a href="detalles.html">
+                                <h3>Ingeniero de Software</h3>
+                            </a>
+                            <!-- el atributo type="submit" funciona sólo para cuando está dentro de un formulario -->
+                            <button class="button-apply-job" id="boton-importante">Aplicar</button>
+                        </div>
+                        <small>Tech Solutions Inc. | Remoto</small>
+                        <p>Buscamos un ingeniero de software con experiencia en desarrollo web y conocimientos en
+                            JavaScript, React y Node.js. EI candidato
+                            ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de comunicación.</p>
+
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <div>
+                            <a href="detalles.html">
+                                <h3>Analista de Datos</h3>
+                            </a>
+                            <button class="button-apply-job" type="submit">Aplicar</button>
+                        </div>
+                        <small>Data Driven Co. | Ciudad de México</small>
+                        <p>Estamos buscando un analista de datos con experiencia en el manejo de grandes conjuntos de
+                            datos
+                            y herramientas de
+                            visualización. Se requiere conocimiento en SQL, Python y R.</p>
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <div>
+                            <a href="detalles.html">
+                                <h3>Desarrollador de Aplicaciones Móviles</h3>
+                            </a>
+                            <button class="button-apply-job" type="submit">Aplicar</button>
+                        </div>
+                        <small>Mobile Apps Ltd. | Guadalajara</small>
+                        <p>Buscamos un desarrollador de aplicaciones móviles con experiencia en iOS y/o Android. EI
+                            candidato debe tener conocimientos en
+                            Swift, Kotlin y eI desarrollo de interfaces de usuario.</p>
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <div>
+                            <a href="detalles.html">
+                                <h3>Ingeniero de DevOps</h3>
+                            </a>
+                            <button class="button-apply-job" type="submit">Aplicar</button>
+                        </div>
+                        <small>Cloud Services SA | Guadalajara</small>
+                        <p>Estamos buscando un ingeniero de DevOps con experiencia en la gestión de infraestructuras en
+                            la
+                            nube, automatización de
+                            procesos y herramientas de integración continua. Se requiere conocimiento en AWS, Azure o
+                            GCP.
+                        </p>
+                    </article>
+                </li>
+            </ul>
         </section>
-</main>
-<nav class="pagination">
-  <a href="#prev"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg></a>
-  <a href="#1" class="is-active">1</a>
-  <a href="#2">2</a>
-  <a href="#3">3</a>
-  <a href="#next"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg></a>
-</nav>
-<footer>
+        <!-- El nav debe estar dentro del `main` porque es un contenido único solo para esta página. El contenido que está por fuera de `main` es para los elementos que se repiten en todas las páginas (como el header y el footer) -->
+        <nav class="pagination">
+            <!--
+            Cuando un anchor o button no tiene texto dentro que indique el propósito del elemento, es recomendado usar atributos como:
+            aria-label, que le indica a los lectores de pantalla cual es el contexto del elemento
+            title, que muestra un tooltip con el valor que se le asigne, cuando el usuario hace hover al elemento
+            -->
+            <a href="#prev" aria-label="Ir a la página de resultados de búsqueda anterior" title="Anterior"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg></a>
+            <a href="#1" class="is-active">1</a>
+            <a href="#2">2</a>
+            <a href="#3">3</a>
+            <a href="#next" aria-label="Ir a la página de resultados de búsqueda siguiente" title="Siguiente"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg></a>
+        </nav>
+    </main>
+    <footer>
         <small>&copy; 2025 CarJobs. Todos los derechos reservados</small>
     </footer>
 </body>
+
 </html>
