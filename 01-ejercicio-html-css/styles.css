@@ -61,8 +61,8 @@ header {
   padding: .5rem 1rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 2rem;
-  height: 64px;
 
   h2 {
     font-size: 1.25rem;
@@ -73,7 +73,6 @@ header {
 
 /* Navegación del header a otras páginas */
 nav {
-  align-items: left;
   gap: 1rem;
   display: flex;
 
@@ -105,7 +104,6 @@ header div a {
 
 /* Hero */
 main > section:nth-child(1) {
-  height: 500px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -303,19 +301,20 @@ footer article {
       background: var(--background);
       padding: .5rem 1rem;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 2rem;
-      height: 64px;
+      justify-content: center;
+      gap: 0.5rem 2rem;
 
-      h2 {
+      h1 {
         font-size: 1.25rem;
         font-weight: 700;
         color: var(--text-primary);
+        margin-block: 0;
       }
     }
 
     nav {
-      align-items: right;
       gap: 1rem;
       display: flex;
       
@@ -336,7 +335,6 @@ footer article {
     /* Botones del Header */
 
     header div{
-      margin-left: auto;
       display: flex;
       align-items: center;
     }
@@ -362,6 +360,7 @@ footer article {
       display: flex;
       text-align: center;
       flex-direction: column;
+      padding-inline: 1rem;
     }
 
     a{
@@ -403,15 +402,15 @@ footer article {
       box-shadow: 0 10px 15px -3px var(--shadow);
       padding: 0.5rem;
       gap: 0.5rem;
-      height: 3rem;
-      width: 80vw;
-      margin: 0 0 0 9.5vw;
+      width: 100%;
     }
 
     .aling-left{
       display: flex;
+      flex-wrap: wrap;
       gap: .5rem;
-      margin: 1rem auto 2rem 9.5vw ;
+      width: 100%;
+      margin-top: 1rem;
     }
 
     select{
@@ -433,28 +432,30 @@ footer article {
     }
 
     .resultados{
-      width: 80vw;
+      max-width: 1200px;
+      width: 100%;
       margin: auto;
     }
 
-    .resultados section{
+    .resultados ul{
       border-radius: .5rem;
       border: 1px solid var(--border);
+      list-style: none;
     }
 
     .resultados article{
       text-align: left;
       border-bottom: 1px solid var(--border);
       padding: 2rem;
+    }
 
-      &:last-child{
-        border: 0px;
-
-      }
+    .resultados li:last-child article {
+      border: 0px;
     }
 
     article div{
       display: flex;
+      align-items: center;
     }
 
     article button{
@@ -466,6 +467,7 @@ footer article {
       border-radius: .5rem;
       margin-left: auto;
       cursor: pointer;
+      border: 0px;
 
       &:hover{
         background-color: var(--input-bg);
@@ -478,24 +480,19 @@ footer article {
       }
     }
 
-    article p{
-      padding-right: 10rem;
+    article p {
+      max-width: 60ch;
     }
-
-    nav{
-      margin: 3rem auto;
-    }    
     
     .pagination{
       gap: 3rem;
       color: var(--text-muted);
       border-radius: 0.375rem;
       transition: all ,3s;
-      width: 2.5rem;
-      height: 2.5rem;
       display: flex;
       justify-content: center;
       margin-block: 2rem;
+      margin-inline: auto;
           
     }
     
@@ -510,3 +507,11 @@ footer article {
       }
     }
     }
+
+@media (width > 640px) {
+  .jobs-search {
+    header {
+      justify-content: space-between;
+    }
+  }
+}
