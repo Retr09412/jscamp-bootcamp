@@ -1,175 +1,170 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <title>DevJobs - Empleos</title>
-    <meta charset="UTF-8" />
-    <meta
-      name="description"
-      content="Listado con empleos y filtros para encontrar el trabajo de tus sueños."
-    />
-    <link rel="stylesheet" href="./styles.css" />
-    <!-- Aquí están tus scripts -->
-    <script type="module" src="./fetch-data.js"></script>
-    <script type="module" src="./filters.js"></script>
-    <script type="module" src="./apply-button.js"></script>
-  </head>
 
-  <body>
+<head>
+    <title>CarJobs - Empleos</title>
+    <meta name="description" content="CarJobs es un sitio web que permite buscar empleos en el sector tecnológico">
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width">
+    <script type="module" src="main.js"></script>
+    
+</head>
+
+<body class="jobs-search">
     <header>
-      <h1>
-        <svg
-          fill="none"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-        DevJobs
-      </h1>
+        <h1>CarJobs</h1>
 
-      <nav>
-        <a href="#">Empleos</a>
-      </nav>
-
-      <a href="#" aria-label="Ir a mi perfil" title="Mi perfil">
-        <img src="https://unavatar.io/github/mdo" alt="Avatar del usuario" width="32" height="32" />
-      </a>
-    </header>
-
-    <main>
-      <section class="jobs-search">
-        <h1>Encuentra tu próximo trabajo</h1>
-        <p>Explora miles de oportunidades en el sector tecnológico.</p>
-
-        <form id="empleos-search-form" role="search">
-          <div class="search-bar">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-search"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-              <path d="M21 21l-6 -6" />
-            </svg>
-
-            <input
-              name="search"
-              id="empleos-search-input"
-              type="text"
-              placeholder="Buscar trabajos, empresas o habilidades"
-            />
-          </div>
-
-          <div class="search-filters">
-            <select name="technology" id="filter-technology">
-              <option value="">Tecnología</option>
-              <optgroup label="Tecnologías populares">
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="react">React</option>
-                <option value="nodejs">Node.js</option>
-              </optgroup>
-              <option value="java">Java</option>
-              <hr />
-              <option value="csharp">C#</option>
-              <option value="c">C</option>
-              <option value="c++">C++</option>
-              <hr />
-              <option value="ruby">Ruby</option>
-              <option value="php">PHP</option>
-            </select>
-
-            <select name="location" id="filter-location">
-              <option value="">Ubicación</option>
-              <option value="remoto">Remoto</option>
-              <option value="cdmx">Ciudad de México</option>
-              <option value="guadalajara">Guadalajara</option>
-              <option value="monterrey">Monterrey</option>
-              <option value="barcelona">Barcelona</option>
-            </select>
-
-            <select name="experience-level" id="filter-experience-level">
-              <option value="">Nivel de experiencia</option>
-              <option value="junior">Junior</option>
-              <option value="mid">Mid-level</option>
-              <option value="senior">Senior</option>
-              <option value="lead">Lead</option>
-            </select>
-          </div>
-        </form>
-      </section>
-
-      <section class="jobs-result">
-        <h2>Resultados de búsqueda</h2>
-
-        <ul class="jobs-listings">
-          <!-- Aquí se insertan los empleos dinámicamente -->
-        </ul>
-
-        <nav class="pagination">
-          <a
-            href="#"
-            aria-label="Ir a la página anterior de los resultados de búsqueda"
-            title="Página anterior"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M15 6l-6 6l6 6" />
-            </svg>
-          </a>
-          <a class="is-active" href="#">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <a
-            href="#"
-            aria-label="Ir a la página siguiente de los resultados de búsqueda"
-            title="Página siguiente"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M9 6l6 6l-6 6" />
-            </svg>
-          </a>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="empleos.html">Empleos</a>
+            <a href="#">Empresas</a>
+            <a href="#">Salarios</a>
         </nav>
-      </section>
-    </main>
+        <div>
+            <carjobs-avatar-element service="x" username="batman" size="50px"></carjobs-avatar-element>
+        </div>
+    </header>
+    <main>
+        <section>
+            <h1>Encuentra tu próximo trabajo</h1>
+            <p class="sty">Explora miles de oportunidades en el sector tecnológico.</p>
+            <form role="search">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="#a09fdf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-search">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                        <path d="M21 21l-6 -6" />
+                    </svg>
+                    <input id="search-input" type="text" placeholder="Buscar trabajos, empresas o habilidades">
+                    <button id="" hidden type="submit">Buscar</button>
+                </div>
+            </form>
+            <form class="aling-left">
+                <select name="tecnologia" id="search-tecnology">
+                    <option value="">Todas las tecnologías</option>
+                    <option value="react">React</option>
+                    <option value="node">Node.js</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="mobile">Mobile</option>
+                </select>
+                <select name="ubicacion" id="search-ubi">
+                    <option value="">Todas las ubicaciones</option>
+                    <option value="remoto">Remoto</option>
+                    <option value="cdmx">Ciudad de México</option>
+                    <option value="guadalajara">Guadalajara</option>
+                    <option value="barcelona">Barcelona</option>
+                    <option value="bsas">Buenos Aires</option>
+                    <option value="madrid">Madrid</option>
+                    <option value="valencia">Valencia</option>
+                    <option value="bogota">Bogotá</option>
+                    <option value="lima">Lima</option>
+                    <option value="santiago">Santiago de Chile</option>
+                    <option value="monterrey">Monterrey</option>
+                </select>
+                <select name="nivel" id="search-nivel">
+                    <option value="">Nivel de experiencia</option>
+                    <option value="junior">Junior</option>
+                    <option value="mid-level">Mid-Level</option>
+                    <option value="mid">Mid</option>
+                    <option value="senior">Senior</option>
+                </select>
+            </form>
+        </section>
+        <section class="resultados">
+            <h2>Resultados de búsqueda</h2>
+            <div class="jobs-listings" id="contenedor-trabajos">
+        <!-- Aquí se insertan los empleos dinámicamente -->
+            </div>
+            <!-- TRABAJOS v1  <ul id="contenedor-trabajos">
+                <li class="card" data-tecnologia="react" data-ubi="remoto">
+                    <article></div>
+                        <div>
+                            <a href="detalles.html">
+                                <h3>Ingeniero de Software</h3>
+                            </a>
+                            <button class="button-apply-job" id="boton-importante">Aplicar</button>
+                        </div>
+                        <small>Tech Solutions Inc. | Remoto</small>
+                        <p>Buscamos un ingeniero de software con experiencia en desarrollo web y conocimientos en
+                            JavaScript, React y Node.js. EI candidato
+                            ideal debe ser capaz de trabajar en equipo y tener buenas habilidades de comunicación.</p>
 
+                    </article>
+                </li>
+                <li class="card" data-tecnologia="sql" data-ubi="presencial">
+                    <article>
+                        <div>
+                            <a href="detalles.html">
+                                <h3>Analista de Datos</h3>
+                            </a>
+                            <button class="button-apply-job" type="submit">Aplicar</button>
+                        </div>
+                        <small>Data Driven Co. | Ciudad de México</small>
+                        <p>Estamos buscando un analista de datos con experiencia en el manejo de grandes conjuntos de
+                            datos
+                            y herramientas de
+                            visualización. Se requiere conocimiento en SQL, Python y R.</p>
+                    </article>
+                </li>
+                <li class="card" data-tecnologia="swift" data-ubi="presencial">
+                    <article>
+                        <div>
+                            <a href="detalles.html">
+                                <h3>Desarrollador de Aplicaciones Móviles</h3>
+                            </a>
+                            <button class="button-apply-job" type="submit">Aplicar</button>
+                        </div>
+                        <small>Mobile Apps Ltd. | Guadalajara</small>
+                        <p>Buscamos un desarrollador de aplicaciones móviles con experiencia en iOS y/o Android. EI
+                            candidato debe tener conocimientos en
+                            Swift, Kotlin y eI desarrollo de interfaces de usuario.</p>
+                    </article>
+                </li>
+                <li class="card" data-tecnologia="aws" data-ubi="híbrido">
+                    <article>
+                        <div>
+                            <a href="detalles.html">
+                                <h3>Ingeniero de DevOps</h3>
+                            </a>
+                            <button class="button-apply-job" type="submit">Aplicar</button>
+                        </div>
+                        <small>Cloud Services SA | Guadalajara</small>
+                        <p>Estamos buscando un ingeniero de DevOps con experiencia en la gestión de infraestructuras en
+                            la
+                            nube, automatización de
+                            procesos y herramientas de integración continua. Se requiere conocimiento en AWS, Azure o
+                            GCP.
+                        </p>
+                    </article>
+                </li> 
+            </ul> -->
+        </section>
+        <nav class="pagination">
+            <a href="#prev" aria-label="Ir a la página de resultados de búsqueda anterior" title="Anterior"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15 6l-6 6l6 6" />
+                </svg></a>
+            <a href="#1" class="is-active">1</a>
+            <a href="#2">2</a>
+            <a href="#3">3</a>
+            <a href="#next" aria-label="Ir a la página de resultados de búsqueda siguiente" title="Siguiente"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 6l6 6l-6 6" />
+                </svg></a>
+        </nav>
+    </main>
     <footer>
-      <small>&copy; 2025 DevJobs. Todos los derechos reservados.</small>
+        <small>&copy; 2025 CarJobs. Todos los derechos reservados</small>
     </footer>
-  </body>
+</body>
+
 </html>
