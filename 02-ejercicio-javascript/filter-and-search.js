@@ -65,14 +65,16 @@ const selectUbicacion = document.querySelector("#search-ubi");      // Select Ub
 const selectNivel = document.querySelector("#search-nivel");        // Select Nivel
 
 function filtrarTrabajos() {
-    const textoBusqueda = inputBuscador.value.toLowerCase();
+    const textoBusqueda = inputBuscador.value.toLowerCase().trim(); // .trim() para eliminar espacios en blanco al inicio y al final
     const filtroTec = selectTecnologia.value.toLowerCase();
-    const filtroUbi = selectUbicacion.value; 
-    const filtroNivel = selectNivel.value;
+    const filtroUbi = selectUbicacion.value.toLowerCase(); // .toLowerCase() simplemente para asegurarnos que el valor sea en minúsculas 
+    const filtroNivel = selectNivel.value.toLowerCase(); // .toLowerCase() simplemente para asegurarnos que el valor sea en minúsculas
     const tarjetas = document.querySelectorAll(".jobs-listings article");
     tarjetas.forEach(tarjeta => {
+        console.log('[tecnology]', tarjeta.dataset.technology);
         const titulo = tarjeta.querySelector("h3").textContent.toLowerCase();
-        const dataTec = tarjeta.dataset.technology.toLowerCase(); // "react,node,js"
+        const dataTec = tarjeta.dataset.technology.toLowerCase().split(","); // "react,node,js" -> ["react", "node", "js"] -> Hacemos que sea una lista, esto es mejor por lo siguiente:
+        // imagina que el usuario pone como tecnología `java` y la lista tiene "java,javascript". Si comparamos por string [dataTec.includes(filtroTec)], el resultado puede ser incorrecto porque javascript incluye el texto `java`. Y lo que queremos es que solo filtre `java` y no `javascript` 
         const dataUbi = tarjeta.dataset.ubi;
         const dataNivel = tarjeta.dataset.nivel;
 
