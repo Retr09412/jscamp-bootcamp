@@ -1,1 +1,12 @@
-/* Pasa tu contenido de src/App.jsx aquí */
+import { Main } from "../components/Main.jsx";
+
+
+export function SearchPage() {
+
+    return (
+        <div className = "jobs-search">
+            <Main />
+        </div>
+    )
+}
+
