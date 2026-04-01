@@ -1,19 +1,21 @@
-import { createServer } from 'node:http'
+import {createServer} from 'node:http'
+import { json } from 'node:stream/consumers'
+import { randomUUID } from 'node:crypto'
+import process from 'node:process'
 
 process.loadEnvFile()
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT ?? 3000
 
-const server = createServer((req, res) => {
-  // TODO: Aquí irá la lógica del servidor
-})
+function sendJson(statusCode, res, data) {
+    
+    res.statusCode = statusCode
+    res.setHeader('Content-Type', 'application/json; charset=utf-8')
+    res.end(JSON.stringify(data))
 
-server.listen(port, () => {
-  const address = server.address()
-  console.log(`Servidor escuchando en http://localhost:${address.port}`)
-})
+}
 
-const users = [
+const users =  [
   {
     id: 'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d',
     name: 'Miguel',
@@ -65,3 +67,115 @@ const users = [
     age: 30,
   },
 ]
+
+const server = createServer(async (req, res) => {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+    
+    const {method,url} = req
+
+    if(url === '/'){
+        return res.end('Usted es un vacano')
+    }
+
+    const parsedUrl = new URL(url, `http://${req.headers.host}`)
+
+    const pathname = parsedUrl.pathname
+    const filterparams = parsedUrl.searchParams
+
+    
+    if(method === 'POST'){
+        if(pathname === "/users"){
+        const body = await json(req)
+        if(body === null || !body.name ){
+            return sendJson(400, res , {error: 'Name Is Required'})
+        }
+        else{
+            const newUser = {
+                id: randomUUID(),
+                name:body.name,
+                age:body.age
+            }
+    
+        
+            users.push(newUser)
+
+            return sendJson(201, res, {message: "Usuario Creado", user: newUser})
+        }
+        
+        
+        }
+    }
+
+    if(method === 'GET'){
+        if(pathname === '/users'){
+
+            if(filterparams.size === 0){
+                return sendJson(200, res, users)
+            }
+
+            else{
+
+                let filteredUsers = users;
+            
+                if(filterparams.has('name')){
+                    
+                    const nameFilter = filterparams.get('name').toLowerCase()
+
+                    filteredUsers = filteredUsers.filter(user =>
+                        user.name.toLowerCase().includes(nameFilter)
+                    )
+                }
+
+                if(filterparams.has("limit") || filterparams.has("offset")) {
+
+                    const limiteNumero = Number(filterparams.get('limit'));
+                    const incioNumero = Number(filterparams.get('offset'));
+                    
+                    filteredUsers = filteredUsers.slice(incioNumero,incioNumero + limiteNumero)
+                }
+
+                if(filterparams.has('minAge')){
+                    const min = Number(filterparams.get('minAge'));
+
+                    filteredUsers = filteredUsers.filter(user => 
+                        Number(user.age) >= min    
+
+                    )
+                    
+                }
+
+                if(filterparams.has('maxAge')){
+                    const max = Number(filterparams.get('maxAge'));
+
+                    filteredUsers = filteredUsers.filter(user => 
+                        Number(user.age) <= max    
+                    )
+                }
+
+
+                return sendJson(200, res, filteredUsers)
+                     
+            }
+        }
+
+        if (pathname === '/health'){
+            res.statusCode = 200
+            res.setHeader('Content-Type', 'application/json; charset=utf-8')
+            let uptime = Math.floor(process.uptime())
+            return res.end(JSON.stringify({ status: 'ok', uptime }))
+        }
+            
+    }
+
+    
+    
+
+    return sendJson(404, res, {message: 'NOT FOUND'})
+
+})
+
+server.listen(port, () =>{
+    const address = server.address()
+    console.log(`Servidor escuchando en el http://localhost:${address.port}`)
+
+})
