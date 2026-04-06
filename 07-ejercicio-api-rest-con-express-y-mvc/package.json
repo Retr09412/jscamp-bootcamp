@@ -1,5 +1,5 @@
 {
-  "name": "07-ejercicio-api-rest-con-express-y-mvc",
+  "name": "04-express",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,11 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Carlos Nicola",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "cors": "2.8.6",
-    "express": "5.2.1"
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
   }
 }
