@@ -1,65 +1,75 @@
-import { JobModel } from "../models/job.js"
-import { DEFAULTS } from "../config.js"
+import { JobModel} from "../models/job.js";
+import { validatePartialJob, validateJob } from "../schemas/jobs.js";
 
-export class JobController {
-    static async getAll(req, res){
+export class JobController{
 
-        const { text, technology, type, level, limit = DEFAULTS.LIMIT_PAGINATION, offset = DEFAULTS.OFFSET_PAGINATION } = req.query
+  static async getAll(req,res){
+    const {text, title, level, technology, offset, limit} = req.query
+    const jobs = await JobModel.getAll({text, title, level, technology, offset, limit})
+    return res.status(200).json(jobs)
+  }
 
-        const { paginatedJobs, limitNumber, offsetNumber } = await JobModel.getAll({ text, technology, type, level, limit, offset }) 
 
-        return res.json({ data: paginatedJobs, total: paginatedJobs.length, limit: limitNumber, offset: offsetNumber})
+
+  static async getById(req,res){
+    const {id} = req.params
+    const job = await JobModel.getById(id)
+    if(!job) return res.status(404).json({message: 'Job not found'}   )
+    return res.status(200).json(job)
+  }
+
+static async create(req, res) {
+    const result = validateJob(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) });
+    }
+    try {
+      const nuevoTrabajo = await JobModel.create({ input: result.data });
+      return res.status(201).json(nuevoTrabajo);
+    } catch (error) {
+      return res.status(500).json({ 
+        mensaje: "El servidor explotó", 
+        razonExacta: error.message 
+      });
+    }
+  }
+
+  static async update(req,res){
+    const {id} = req.params
+    const result = validatePartialJob(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) });
     }
 
-    static async getId(req, res){
-
-        const { id } = req.params
-
-        const {status, job} = await JobModel.getId(id)
-        
-        return res.status(status).json(job)
+    const oldJob = await JobModel.getById(id)
+    if (!oldJob) {
+      return res.status(404).json({ message: 'Job not found' });
     }
+    const newJobs = await JobModel.update(id, {input: result.data})
+    return res.status(204).json(newJobs)
+  }
 
-    static async create(req, res){
-        
-        const { titulo, empresa, ubicacion, descripcion, data } = req.body
-
-        const {status, newJob} = await JobModel.create({ titulo, empresa, ubicacion, descripcion, data })
-        
-        return res.status(status).json(newJob)
+  static async patch(req,res){
+    const {id} = req.params
+    const result = validatePartialJob(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) });
     }
-
-    static async update(req, res){
-
-        const { id } = req.params
-        const sentJob = req.body
-
-        const { status, error } = await JobModel.update({ id, sentJob })
-        
-        return error
-            ? res.status(status).json(error)
-            : res.status(status).send()
+    const oldJob = await JobModel.getById(id)
+    if (!oldJob) {
+      return res.status(404).json({ message: 'Job not found' });
     }
+    const newJobs = await JobModel.patch(id, {input: result.data})
+    return res.status(204).json(newJobs)
+  }
 
-    static async partialUpdate(req, res){
-        const { id } = req.params
-        const sentJob = req.body
-
-        const { status, error } = await JobModel.partialUpdate({ id, sentJob })
-        
-        return error
-            ? res.status(status).json(error)
-            : res.status(status).send()
+  static async delete(req,res){
+    const {id} = req.params
+    const oldJob = await JobModel.getById(id)
+    if (!oldJob) {
+      return res.status(404).json({ message: 'Job not found' });
     }
-
-    static async delete(req, res){
-
-        const { id } = req.params
-        
-        const { status, error } = await JobModel.delete(id)
-
-        return error
-            ? res.status(status).json(error)
-            : res.status(status).send()
-    }
+    const response = await JobModel.delete(id)
+    return res.status(204).json(response)
+  }
 }
