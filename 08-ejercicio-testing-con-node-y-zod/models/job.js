@@ -1,166 +1,102 @@
-import jobs from '../jobs.json' with {type: 'json'}
+import { DEFAULTS } from '../config.js';
+import crypto from 'crypto'
+import { json } from 'stream/consumers';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const jobs = require('../data/jobs.json');
 
 export class JobModel {
-  static async getAll({ text, technology, type, level, limit, offset }) {
+  
 
-    const filteredJobs = jobs.filter(job => {
 
-      const normalizeTech = () => text.toLowerCase()
+  static async getAll({text, title, level, technology, offset = DEFAULTS.LIMIT_OFFSET,  limit = DEFAULTS.LIMIT_PAGINATION}){
+    let filteredJobs = jobs;
+    
+    if(text){
+      const searchTerm = text.toLowerCase();
+      filteredJobs = filteredJobs.filter(job => 
+        job.titulo.toLowerCase().includes(searchTerm) || job.descripcion.toLowerCase().includes(searchTerm)
+      )
+    }
+    
+    if(title){
+      const searchTitle = title.toLowerCase();
+      filteredJobs = filteredJobs.filter(job => 
+        job.titulo.toLowerCase().includes(searchTitle)
+      )
+    }
+    
+    if(level){
+      const searchLevel = level.toLowerCase();
+      filteredJobs = filteredJobs.filter(job => 
+        job.data.nivel.some(nivel => nivel.toLowerCase().includes(searchLevel))
+      )
+    }
+    
+    if(technology){
+      const searchTechnology = technology.toLowerCase();
+      filteredJobs = filteredJobs.filter(job =>
+        Array.isArray(job.data.technology) ? job.data.technology.some(tech => tech.toLowerCase().includes(searchTechnology)) : searchTechnology === job.data.technology.toLowerCase()
+      )
+    }
+    
+    const limitNumber = Number(limit);
+    const offsetNumber = Number(offset);
 
-      const matchText = text
-        ? job.titulo.toLowerCase().includes(normalizeTech)
-        || job.descripcion.toLowerCase().includes(normalizeTech)
-        : true
+    const paginationJobs = filteredJobs.slice(offsetNumber, limitNumber + offsetNumber)
 
-      const matchTech = technology ? (job.data.technology.includes(technology)) : true
-      const matchType = type ? (job.data.modalidad === type) : true
-      const matchLevel = level ? (job.data.nivel === level) : true
+    return paginationJobs
 
-      return matchText && matchTech && matchType && matchLevel
-    })
+  }
+  
+  static async getById(id) {
+    return jobs.find(job => job.id === id);
+  }
+  
 
-    const limitNumber = Number(limit)
-    const offsetNumber = Number(offset)
-
-    const paginatedJobs = filteredJobs.slice(offsetNumber, offsetNumber + limitNumber)
-
-    return { paginatedJobs, limitNumber, offsetNumber }
+  static async create ({input}){
+    const newJob = {
+      id: crypto.randomUUID(),
+      ...input
+    }
+    jobs.push(newJob)
+    console.log('TRABAJO CREADO ID:', newJob.id)
+    return newJob
   }
 
-  static async getId(id) {
+  static async update (id, {input}){
+    const jobIndex = jobs.findIndex(job => job.id === id);
+    jobs[jobIndex] = {
+      ...jobs[jobIndex],
+      ...input
 
-    const job = jobs.find(job => job.id === id)
-
-    const output = {
-      status: 200,
-      job: job
     }
-
-    if (!output.job) {
-      output.status = 404
-      output.job = { error: 'Job Not Found' }
-    }
-
-    return output
+    console.log('ID DEL TRABAJO ACTUALIZADO:', jobs[jobIndex].id)
+    return jobs[jobIndex]
   }
 
-  static async create({ titulo, empresa, ubicacion, descripcion, data }) {
-
-    const output = {
-      status: 201,
-      newJob: {
-        id: crypto.randomUUID(),
-        titulo,
-        empresa,
-        ubicacion,
-        descripcion,
-        data
-      }
-    }
-
-    jobs.push(output.newJob)
-
-    return output
-  }
-
-  static async update({ id, sentJob }) {
-
-    const output = {
-      status: 204,
-      error: null
-    }
-
-    const errorStatus = 404
-    const errorMessage = 'Target Job Not Found'
-
-    if (!id) {
-      output.status = errorStatus
-      output.error = errorMessage
-
-      return output
-    }
-
-    const jobIndex = jobs.findIndex(job => job.id === id)
-
+  static async patch (id, {input}){
+    const jobIndex = jobs.findIndex(job => job.id === id);
     if (jobIndex === -1) {
-      output.status = errorStatus
-      output.error = errorMessage
-
-      return output
+      console.log('ID DEL TRABAJO NO ENCONTRADO:', id)
+      return res.status(404).json({message: 'Job not found'})
     }
+    jobs[jobIndex] = {
+      id,
+      ...jobs[jobIndex],
+      ...input
+    }
+    console.log('ID DEL TRABAJO ACTUALIZADO:', jobs[jobIndex].id)
+    return jobs[jobIndex]
 
-    jobs[jobIndex] = { ...sentJob, id }
-
-    return output
   }
 
-  static async partialUpdate({ id, sentJob }) {
 
-    const { titulo = null, empresa = null, ubicacion = null, descripcion = null, data = null } = sentJob
-
-    const output = {
-      status: 204,
-      error: null
-    }
-
-    const errorStatus = 404
-    const errorMessage = 'Target Job Not Found'
-
-    if (!id) {
-      output.status = errorStatus
-      output.error = errorMessage
-
-      return output
-    }
-
-    const jobIndex = jobs.findIndex(job => job.id === id)
-
-    if (jobIndex === -1) {
-      output.status = errorStatus
-      output.error = errorMessage
-
-      return output
-    }
-
-    const job = jobs[jobIndex]
-
-    job.titulo = titulo ?? job.titulo
-    job.empresa = empresa ?? job.empresa
-    job.ubicacion = ubicacion ?? job.ubicacion
-    job.descripcion = descripcion ?? job.descripcion
-    job.data = data ?? job.data
-
-    return output
-  }
-
-  static async delete(id) {
-
-    const output = {
-      status: 204,
-      error: null
-    }
-
-    const errorStatus = 404
-    const errorMessage = 'Target Job Not Found'
-
-    if (!id) {
-      output.status = errorStatus
-      output.error = errorMessage
-
-      return output
-    }
-
-    const jobIndex = jobs.findIndex(job => job.id === id)
-
-    if (jobIndex === -1) {
-      output.status = errorStatus
-      output.error = errorMessage
-
-      return output
-    }
-
+  static async delete (id){
+    const jobIndex = jobs.findIndex(job => job.id === id);
     jobs.splice(jobIndex, 1)
-
-    return output
+    console.log('ID DEL TRABAJO ELIMINADO:', id)
+    return {message: 'Job deleted'}
   }
 }
