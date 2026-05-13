@@ -25,35 +25,39 @@ export function Main() {
   // Usamos la función para que el estado inicial no esté vacío sino que nazca con lo que diga la URL.
   const [filters, setFilters] = useState(leerFiltrosDeLaUrl());
 
-  // Función para usar api con filtros
-  const fetchJobsFromAPI = async (filtrosActuales) => {
-    setLoading(true); 
-    try {
-      const params = new URLSearchParams();
-
-      // Parte de filter
-      if (filtrosActuales.textBuscador) params.append('text', filtrosActuales.textBuscador);
-      if (filtrosActuales.technology) params.append('technology', filtrosActuales.technology);
-      if (filtrosActuales.location) params.append('type', filtrosActuales.location);
-      if (filtrosActuales.experienceLevel) params.append('level', filtrosActuales.experienceLevel)
-
-      const queryParams = params.toString();
-      
-      const response = await fetch(`https://jscamp-api.vercel.app/api/jobs?${queryParams}`);
-      const json = await response.json();
-
-      setJobs(json.data || json); 
-    } catch (error) {
-      console.error("ERROR AL CARGAR DATOS", error);
-    } finally {
-      setLoading(false); 
-    }
-  };
-
   // Cargar los trabajos apenas abres la página
   useEffect(() => {
-    fetchJobsFromAPI(filters); 
-  }, []); // cuidado hacemos un loop jaja
+    // IMPORTANTE: Este useEffect se encarga de actualizar los trabajos haciendo una llamada a la API. Y si vemos el segundo parámetro del mismo, tenemos un array de dependencias que nos indica cuando se va a volver a ejecutar el efecto.
+    // En este caso, podemos decir: Este efecto quiero que se ejecute al inicio de mi aplicación, y cuando el usuario cambie los filtros.
+    // Así que podemos remover el llamado a la función `fetchJobsFromAPI` en `handleSearch` y dejarla solo en el useEffect.
+    // Así el useEffect se encarga de actualizar los trabajos cuando los filtros cambien, y el `handleSearch` se encarga de actualizar los filtros y la URL.
+    // Función para usar api con filtros
+    const fetchJobsFromAPI = async () => {
+      setLoading(true); 
+      try {
+        const params = new URLSearchParams();
+
+        // Parte de filter
+        if (filters.textBuscador) params.append('text', filters.textBuscador);
+        if (filters.technology) params.append('technology', filters.technology);
+        if (filters.location) params.append('type', filters.location);
+        if (filters.experienceLevel) params.append('level', filters.experienceLevel)
+
+        const queryParams = params.toString();
+        
+        const response = await fetch(`https://jscamp-api.vercel.app/api/jobs?${queryParams}`);
+        const json = await response.json();
+
+        setJobs(json.data || json); 
+      } catch (error) {
+        console.error("ERROR AL CARGAR DATOS", error);
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    fetchJobsFromAPI(); 
+  }, [filters]); // cuidado hacemos un loop jaja
 
   // Cuando se busca:
   const handleSearch = (newFilters) => {
@@ -76,7 +80,8 @@ export function Main() {
     
     window.history.pushState(null, '', nuevaUrl);
 
-    fetchJobsFromAPI(newFilters); // Le pedimos a la API los nuevos resultados
+    // Ya no hace falta esto
+    // fetchJobsFromAPI(newFilters); // Le pedimos a la API los nuevos resultados
   };
 
   // Pagination que si vale
