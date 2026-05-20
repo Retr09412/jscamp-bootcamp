@@ -39,7 +39,8 @@ describe('GET /jobs', () => {
 
     const json = await response.json()
     assert.ok( 
-      json.some(job => (job.data.technology).includes(tech)),
+      // En vez de un some, usamos every para verificar que TODOS los trabajos tengan la tecnología
+      json.every(job => (job.data.technology).includes(tech)),
       `Todos los trabajos deben ser de la tecnología ${tech}`
 
     )
@@ -58,10 +59,24 @@ describe('GET /jobs', () => {
 
   test ('Debe devolver el offset de la peticion', async () => {
     const offset = 2
-    const response = await fetch(`${BASE_URL}/jobs?offset=${offset}`)
+    const limit = 3
+    const response = await fetch(`${BASE_URL}/jobs?offset=${offset}&limit=${limit}`)
+    const totalJobsResponse = await fetch(`${BASE_URL}/jobs`)
     assert.strictEqual(response.status, 200), 'Status debe ser 200'
 
+    // Podemos verificar que la tercera posición (índice 2) de la respuesta
+    // sea el mismo que el tercer trabajo de la base de datos
+    // ATENCIÓN: Esto es una alternativa, y mezcla tests ya definidos, pero creo que es interesante compartirte esta solución
+    const totalJobs = await totalJobsResponse.json()
+    const thirdJob = totalJobs[offset]
+    
     const json = await response.json()
+    const firstJobWithOffset = json[0]
+
+    assert.strictEqual(firstJobWithOffset.id, thirdJob.id, 'El primer trabajo de la respuesta debe ser el tercer trabajo de la base de datos')
+
+    // ---
+
     assert.ok(json.length > 0, 'Debe devolver trabajos a partir del offset')
   })
 
@@ -105,6 +120,13 @@ describe('POST /jobs', () => {
 describe('GET /jobs/:id', () => {
   test('Debe devolver un trabajo específico por ID con status 200', async () => {
     
+    // Puede ser un ID escrito a mano, o podemos hacer un Fetch de todos los jobs, y agarrar el primero
+    // Así probamos con un ID real que existe en la base de datos
+    /* 
+    const responseAll = await fetch(`${BASE_URL}/jobs`);
+    const jsonAll = await responseAll.json();
+    const idReal = jsonAll[0].id;
+    */
     const idReal = 'd35b2c89-5d60-4f26-b19a-6cfb2f1a0f57'; 
 
     const response = await fetch(`${BASE_URL}/jobs/${idReal}`);
@@ -137,7 +159,7 @@ describe('PUT /jobs/:id', () => {
         about: "CloudTech es una empresa líder en soluciones cloud..."
       }
     };
-    const prueba = await fetch(`${BASE_URL}/jobs/${idReal}`);
+    // const prueba = await fetch(`${BASE_URL}/jobs/${idReal}`);
     const response = await fetch(`${BASE_URL}/jobs/${idReal}`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -193,5 +215,7 @@ describe('DELETE /jobs/:id', () => {
 
     const responseGet = await fetch(`${BASE_URL}/jobs/${idReal}`);
 
+    // Falta verificar que el job ya no existe:
+    assert.strictEqual(responseGet.status, 404, 'Status debe ser 404');
   });
 });
