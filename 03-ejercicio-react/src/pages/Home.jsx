@@ -17,7 +17,8 @@ export function HomePage() {
     return (
         <main>
             <section>
-                <img src="background.webp" width="200px"/>
+                {/* Siempre pongamos un atributo alt en las imágenes con el height y width. Ahora puse unos de referencia, la idea es que tanto width como height respeten el aspect ratio de la imagen, y el alt sea descriptivo */}
+                <img src="background.webp" width="200px" height="200px" alt="Background" />
                 <h1>Encuentra el trabajo de tus sueños</h1>
                 <p>Únete a la comunidad más grande de
                     desarrolladores y encuentra tu próxima

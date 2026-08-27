@@ -1,9 +1,10 @@
 import { useId} from "react";
 import {useState} from "react"
 
-const useSerchForm = ({idTechnology, idText, idLocation, idExperienceLevel, onSearch, ontextFilter}) => {
-  const [searchText, setSearchText] = useState("");
-  
+const useSerchForm = ({idTechnology, idText, idLocation, idExperienceLevel, onSearch}) => {
+  // No estas usando el searchText ni el setSearchText
+  // const [searchText, setSearchText] = useState("");
+
   const handleSubmit = (event) => {
       event.preventDefault()
       const formData = new FormData(event.target);
@@ -13,11 +14,11 @@ const useSerchForm = ({idTechnology, idText, idLocation, idExperienceLevel, onSe
         location: formData.get(idLocation),
         experienceLevel: formData.get(idExperienceLevel)
       }
-      setSearchText(newFilters.textBuscador);
+      // setSearchText(newFilters.textBuscador);
       onSearch(newFilters);
     }
 
-    return {handleSubmit, searchText, setSearchText}
+    return {handleSubmit }
 }
 
 
@@ -33,7 +34,7 @@ export function SearchFormSection({onSearch}) {
   const [focusField, setFocusField] = useState(null);
 
 
-  const {handleSubmit, searchText, setSearchText} = useSerchForm({idTechnology, idText, idLocation, idExperienceLevel, onSearch})
+  const {handleSubmit} = useSerchForm({idTechnology, idText, idLocation, idExperienceLevel, onSearch})
   return (
     <>
     <form onSubmit = {handleSubmit} id='empleos-search-form'  role="search">
