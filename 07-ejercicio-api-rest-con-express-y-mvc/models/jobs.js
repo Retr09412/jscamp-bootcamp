@@ -46,13 +46,14 @@ export class JobModel {
 
   }
   
-  static async getById(id, res) {
+  // No necesitamos el res porque ya lo estamos manejando en el controller
+  static async getById(id) {
     let filterId = jobs;
     const searchId = id;
 
     if(id){
       filterId = filterId.find(job => job.id === searchId)
-      return filterId ? res.status(200).json(filterId) : res.status(404).json({message: 'Job not found'})
+      return filterId
     }
   }
   
@@ -91,7 +92,7 @@ export class JobModel {
     const jobIndex = jobs.findIndex(job => job.id === id);
     if (jobIndex === -1) {
       console.log('ID DEL TRABAJO NO ENCONTRADO:', id)
-      return res.status(404).json({message: 'Job not found'})
+      return null
     }
     jobs[jobIndex] = {
       id,
@@ -108,14 +109,14 @@ export class JobModel {
   }
 
 
-  static async delete (id ,res){
+  static async delete (id){
     const jobIndex = jobs.findIndex(job => job.id === id);
     if (jobIndex === -1) {
       console.log('ID DEL TRABAJO NO ENCONTRADO:', id)
-      return res.status(404).json({message: 'Job not found'})
+      return null
     }
     jobs.splice(jobIndex, 1)
     console.log('ID DEL TRABAJO ELIMINADO:', id)
-    return res.status(200).json({message: 'Job deleted'})
+    return {message: 'Job deleted'}
   }
 }
