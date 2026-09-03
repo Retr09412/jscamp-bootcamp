@@ -1,30 +1,28 @@
-import { Link } from './Link'
+import {Link} from "./Link";
+import { useAuthStore } from "../store/authStore";
+import { NavLink } from "react-router";
 
 export function Header() {
+  ///Funcion del boton de login/logout
+  const HeaderUserButton = () => {
+        const { isLoggedIn, login, logout } = useAuthStore();
+        return isLoggedIn 
+          ? <button className="header-auth-btn" onClick={logout}>Cerrar Sesión</button> 
+          : <button className="header-auth-btn" onClick={login}>Iniciar Sesión</button>
+      };
+  
   return (
     <header>
-      <Link href="/" style={{ textDecoration: 'none' }}>
-        <h1 style={{ color: 'white' }}>
-          <svg
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          DevJobs
-        </h1>
+      <Link href="/" style={{textDecoration: "none", color: "black"}}>
+        <h1>CarJobs</h1>
       </Link>
-
+      
       <nav>
-        <Link href="/search">Empleos</Link>
-
-        <a href="/search">Sin SPA</a>
+      
+        <NavLink to="/search"
+          className={({ isActive }) => isActive ? "active" : ""}
+        >Empleos</NavLink>
+        <HeaderUserButton />
       </nav>
     </header>
   )

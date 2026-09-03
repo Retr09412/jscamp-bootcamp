@@ -1,17 +1,32 @@
-import { Header } from './components/Header.jsx'
-import { Footer } from './components/Footer.jsx'
+import { Header } from "./components/Header.jsx";
+import { Footer } from "./components/Footer.jsx";
+import { Routes, Route } from "react-router";
+import { lazy, Suspense } from 'react';
 
-import { HomePage } from './pages/Home.jsx'
-import { SearchPage } from './pages/Search.jsx'
-import { Route } from './components/Route.jsx'
+// Paginas
+
+const SearchPage =  lazy( () => import("./pages/Search.jsx") );   
+const HomePage =  lazy( () => import("./pages/Home.jsx") );  
+const NotFoundPage =  lazy( () => import("./pages/404.jsx") );
+const DetailPage =  lazy( () => import("./pages/Detail.jsx") );
+
+
 
 function App() {
   return (
     <>
+    <div className = "jobs-search">
       <Header />
-      <Route path="/" component={HomePage} />
-      <Route path="/search" component={SearchPage} />
+      <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path = "/" element={<HomePage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      </Suspense>
       <Footer />
+    </div>
     </>
   )
 }

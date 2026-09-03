@@ -1,7 +1,7 @@
 export function Footer() {
   return (
-    <footer>
-      <small>&copy; 2025 DevJobs. Todos los derechos reservados.</small>
-    </footer>
+    <footer style={{ marginTop: "1rem" }}>
+      <small>&copy; 2025 CarJobs. Todos los derechos reservados</small>
+      </footer>
   )
 }
