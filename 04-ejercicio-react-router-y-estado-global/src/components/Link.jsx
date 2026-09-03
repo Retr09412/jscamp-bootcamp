@@ -1,10 +1,11 @@
-import { Link as NavLink } from "react-router";
+// Lo importamos como RouterLink: "NavLink" ya es otro componente de React Router y el alias confundía, puede llegar a dar errores si luego queremos importarlo.
+import { Link as RouterLink } from "react-router";
 
 export function Link ({href, children, ...restOFProps}) {
     
     return (
-        <NavLink to={href} {...restOFProps}>
+        <RouterLink to={href} {...restOFProps}>
             {children}
-        </NavLink>
+        </RouterLink>
     )
 }
