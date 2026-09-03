@@ -1,24 +1,21 @@
 import { useState } from "react";
-import { Link } from "react-router"; 
 import { useFavoritesStore } from "../store/favoritesStore";
-import { useAuthStore } from "../store/authStore";
+// Cambiamos el link de `react-router` por el nuestro.
+import { Link } from "./Link";
 
-function JobCard({ id, titulo, empresa, ubicacion, descripcion, nivel, modalidad, tecnologia }) {
+// El store ahora solo guarda los IDs de favorites
+function JobCard({ id, titulo, empresa, ubicacion, descripcion, nivel }) {
   const [isApplied, setIsApplied] = useState(false);
 
-  
-  const isLo = useAuthStore((state) => state.isLoggedIn);
+  // const isLo = useAuthStore((state) => state.isLoggedIn);
+  // const favoritos = useFavoritesStore((state) => state.favorites);
+  // const toggleFavorito = useFavoritesStore((state) => state.toggleFavorite);
+  // const empleoActual = { id, titulo, empresa, ubicacion, descripcion, nivel, modalidad, tecnologia };
+  // const esFavorito = (favoritos || []).some((fav) => fav.id === id);
 
-
-  const favoritos = useFavoritesStore((state) => state.favorites); 
-  const toggleFavorito = useFavoritesStore((state) => state.toggleFavorite); 
-
-
-  const empleoActual = { 
-    id, titulo, empresa, ubicacion, descripcion, nivel, modalidad, tecnologia 
-  };
-
-const esFavorito = (favoritos || []).some((fav) => fav.id === id);
+  // Como solo guardamos los IDs, solo hace falta pedir el valor y crear la acción
+  const isFavorite = useFavoritesStore((state) => state.favorites.includes(id));
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const handleApplyClick = () => {
     setIsApplied(true);
@@ -30,7 +27,7 @@ const esFavorito = (favoritos || []).some((fav) => fav.id === id);
   return (
     <article className="job-listing-card">
       <div>
-        <Link to={`/detail/${id}`}> <h3>{titulo}</h3> </Link>
+        <Link href={`/detail/${id}`}> <h3>{titulo}</h3> </Link>
         <small>{empresa} | {ubicacion} | {nivel}</small>
         <p>{descripcion}</p>
       </div>
@@ -39,11 +36,12 @@ const esFavorito = (favoritos || []).some((fav) => fav.id === id);
         {buttonText}
       </button> 
       
+      {/* No hace falta que haya sesión */}
       <button 
-        onClick={() => toggleFavorito(empleoActual)}
+        onClick={() => toggleFavorite(id)}
         style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem' }}
       >
-        {(esFavorito && isLo) ? '❤️' : '🤍'}
+        {isFavorite ? '❤️' : '🤍'}
       </button>
       </div>
     </article>
