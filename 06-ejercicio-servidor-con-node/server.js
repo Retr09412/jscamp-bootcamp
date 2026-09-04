@@ -1,11 +1,15 @@
-import {createServer} from 'node:http'
-import { json } from 'node:stream/consumers'
 import { randomUUID } from 'node:crypto'
+import { createServer } from 'node:http'
 import process from 'node:process'
+import { json } from 'node:stream/consumers'
 
-process.loadEnvFile()
+/* Si no existe el archivo .env `loadEnvFile` lanza un error, lo envolvemos en un try/catch para controlarlo y usar el valor por defecto */
+let port = 3000
+try {
+    process.loadEnvFile()
+    port = process.env.PORT ?? 3000
+} catch {}
 
-const port = process.env.PORT ?? 3000
 
 function sendJson(statusCode, res, data) {
     
