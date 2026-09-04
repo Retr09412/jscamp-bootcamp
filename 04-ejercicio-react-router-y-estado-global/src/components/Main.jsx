@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { SearchFormSection } from "./SearchFormSection.jsx";
 import { ContainerJobs } from "./JobCard.jsx";
 import { Pagination } from "./Pagination.jsx";
+import { SearchFormSection } from "./SearchFormSection.jsx";
 
 
 const RESULTS_PER_PAGE = 5;
@@ -17,29 +17,28 @@ export function Main() {
   const [loading, setLoading] = useState(true); 
   const [currentPage, setCurrentPage] = useState(1);
   
-  // Usamos la función para que el estado inicial no esté vacío sino que nazca con lo que diga la URL
-  const [filters, setFilters] = useState({
+  // const [filters, setFilters] = useState({
+  //   textBuscador: searchParams.get('text') || '',
+  //   technology: searchParams.get('technology') || '',
+  //   location: searchParams.get('type') || '',
+  //   experienceLevel: searchParams.get('level') || ''
+  // });
+
+  // En este caso los filtros solo viven en la URL, de esta forma no hay estado duplicados
+  const filters = {
     textBuscador: searchParams.get('text') || '',
     technology: searchParams.get('technology') || '',
     location: searchParams.get('type') || '',
     experienceLevel: searchParams.get('level') || ''
-  });
+  };
 
   // Función para usar api con filtros
-  const fetchJobsFromAPI = async (filtrosActuales) => {
+  // Antes recibias los filtros y volvías a armar los params aquí (misma lógica que en handleSearch)
+  // Ahora recibimos los searchParams listos: como la API usa los mismos nombres (text, technology, type, level) no hay que cambiar nada: simplificamos el código
+  const fetchJobsFromAPI = async (params) => {
     setLoading(true); 
     try {
-      const params = new URLSearchParams();
-
-      // Parte de filter
-      if (filtrosActuales.textBuscador) params.append('text', filtrosActuales.textBuscador);
-      if (filtrosActuales.technology) params.append('technology', filtrosActuales.technology);
-      if (filtrosActuales.location) params.append('type', filtrosActuales.location);
-      if (filtrosActuales.experienceLevel) params.append('level', filtrosActuales.experienceLevel)
-
-      const queryParams = params.toString();
-      
-      const response = await fetch(`https://jscamp-api.vercel.app/api/jobs?${queryParams}`);
+      const response = await fetch(`https://jscamp-api.vercel.app/api/jobs?${params}`);
       const json = await response.json();
 
       setJobs(json.data || json); 
@@ -51,26 +50,25 @@ export function Main() {
   };
 
   // Cargar los trabajos apenas abres la página
+  // Ahora cada vez que la URL cambia volvemos a hacer la búsqueda
   useEffect(() => {
-    fetchJobsFromAPI(filters); 
-  }, []); // cuidado hacemos un loop jaja
+    fetchJobsFromAPI(searchParams); 
+  }, [searchParams]);
 
   // Cuando se busca:
+  // Con este nuevo enfoque, solo escribimos los filtros en la URL y el useEffect de arriba hace la búsqueda
   const handleSearch = (newFilters) => {
-    setFilters(newFilters);       // Guardamos los filtros en el estado
     setCurrentPage(1);           
     
     // Cuando el usuario le da a buscar escribimos los filtros en la barra de direcciones
     const params = new URLSearchParams();
-    if (newFilters.textBuscador) params.append('text', newFilters.textBuscador);
-    if (newFilters.technology) params.append('technology', newFilters.technology);
-    if (newFilters.location) params.append('type', newFilters.location);
-    if (newFilters.experienceLevel) params.append('level', newFilters.experienceLevel);
+    if (newFilters.textBuscador) params.set('text', newFilters.textBuscador);
+    if (newFilters.technology) params.set('technology', newFilters.technology);
+    if (newFilters.location) params.set('type', newFilters.location);
+    if (newFilters.experienceLevel) params.set('level', newFilters.experienceLevel);
 
-    setSearchParams(params); // Esto actualiza la URL
-
-    // Y luego hacemos la búsqueda con esos filtros
-    fetchJobsFromAPI(newFilters);
+    // Esto actualiza la URL y dispara el useEffect que busca en la API
+    setSearchParams(params);
   };
 
   // Pagination que si vale

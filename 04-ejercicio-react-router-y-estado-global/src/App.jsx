@@ -1,7 +1,7 @@
-import { Header } from "./components/Header.jsx";
-import { Footer } from "./components/Footer.jsx";
-import { Routes, Route } from "react-router";
 import { lazy, Suspense } from 'react';
+import { Route, Routes } from "react-router";
+import { Footer } from "./components/Footer.jsx";
+import { Header } from "./components/Header.jsx";
 
 // Paginas
 

@@ -1,6 +1,4 @@
-import { useId} from "react";
-import {useState} from "react"
-import { useSearchParams, useNavigate } from "react-router";
+import { useId, useState } from "react";
 
 const useSerchForm = ({idTechnology, idText, idLocation, idExperienceLevel, onSearch, filters}) => {
   const [searchText, setSearchText] = useState(filters.textBuscador);
