@@ -2,9 +2,10 @@ name: 05 CI
 
 on:
   push:
-    branches: [master]
+    # branches: [master]
+    branches: [main] # ojo que es main en este repo
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   frontend_lint:

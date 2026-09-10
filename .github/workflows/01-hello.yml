@@ -1,15 +1,13 @@
 name: 01 Hello
-
-on:
-    push:
-        branches: [master]
+on: workflow_dispatch # La tarea pide ejecución manual desde la pestaña Actions con el evento workflow_dispatch
     
 jobs:
-    Saludar:
+    saludar:
         runs-on: ubuntu-24.04
         steps:
             - name: Saludar
-              run: echo `Hola desde GitHub Actions!`
+              # run: echo `Hola desde GitHub Actions!`  # los backticks hacen que bash intente ejecutar el texto como un comando y el mensaje nunca se imprime o daría error
+              run: echo "Hola desde GitHub Actions!"
 
             - name: Ver fecha de runner
               run: date

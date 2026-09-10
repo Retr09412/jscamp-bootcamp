@@ -27,13 +27,7 @@ jobs:
 
       - name: Auto-comment on new issue
         if: github.event_name == 'issues' && github.event.action == 'opened'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '¡Gracias por tu aporte! 🎉'
-            })
+        env:
+          GH_TOKEN: ${{ github.token }} # gh se autentica con el token del runner
+        run: gh issue comment ${{ github.event.issue.number }} --body '¡Gracias por tu aporte! 🎉' # no necesita checkout porque gh infiere el repo de GITHUB_REPOSITORY
               
