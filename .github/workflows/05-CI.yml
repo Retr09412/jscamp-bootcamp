@@ -1,0 +1,59 @@
+name: 05 CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  frontend_lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-pnpm-ci-cd
+      - run: pnpm lint:frontend
+        working-directory: 12-ejercicio-cicd
+    
+  frontend_test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-pnpm-ci-cd
+      - run: pnpm test:frontend
+        working-directory: 12-ejercicio-cicd
+
+  backend_lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-pnpm-ci-cd
+      - run: pnpm lint:backend
+        working-directory: 12-ejercicio-cicd
+  
+  backend_test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-pnpm-ci-cd
+      - run: pnpm test:backend
+        working-directory: 12-ejercicio-cicd
+  
+  frontend_build:
+    runs-on: ubuntu-24.04
+    needs: [frontend_lint, frontend_test]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-pnpm-ci-cd
+      - run: pnpm build:frontend
+        working-directory: 12-ejercicio-cicd
+
+  backend_build:
+    runs-on: ubuntu-24.04
+    needs: [backend_lint, backend_test]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-pnpm-ci-cd
+      - run: pnpm build:backend
+        working-directory: 12-ejercicio-cicd
+        
