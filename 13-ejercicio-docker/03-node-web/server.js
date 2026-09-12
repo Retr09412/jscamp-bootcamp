@@ -2,7 +2,7 @@ import express from 'express'
 
 const app = express()
 const PORT = process.env.PORT || 3000
-const SALUDO = process.env.SALUDO || '¡Hola desde Node.js dentro de Docker! 🐳'
+const SALUDO = process.env.SALUDO || '¡Hola Guayaquil! 🐳'
 
 app.get('/', (req, res) => {
   console.log('[GET] /')

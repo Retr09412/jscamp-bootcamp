@@ -123,7 +123,9 @@ Ahora la app es real: una API con Express que lee variables de entorno, expone u
  docker run --rm -p 3000:3000 -e SALUDO="Hola Midus" --name midu-web midu-web
 ```
 
-Ahora `curl http://localhost:3000/` debería devolver `"mensaje": "Hola Midus"`. 8. **Variables de entorno con `--env-file`**. Crea un archivo `03-node-web/.env`:
+Ahora `curl http://localhost:3000/` debería devolver `"mensaje": "Hola Midus"`. 
+
+8. **Variables de entorno con `--env-file`**. Crea un archivo `03-node-web/.env`:
 
 ```text
  SALUDO=Hola desde .env
