@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 import db from '../db/database'
-import type { Job, CreateJobDTO, UpdateJobDTO, JobFilters } from '../types'
+import type { CreateJobDTO, Job, JobFilters, UpdateJobDTO } from '../types'
 
 export class JobModel {
   // Mapear rows planos → Job con estructura anidada
@@ -36,25 +36,28 @@ export class JobModel {
 
   // Obtener todos los jobs con filtros opcionales y paginación
   static async getAll(filters?: JobFilters): Promise<Job[]> {
-    const conditions: string[] = ['1=1']
-    const params: any[] = []
+    // Un detalle: El JOIN de abajo genera una fila por cada tecnología del job. Si aplicamos LIMIT sobre el JOIN, contamos filas y no jobs.
+    // La solución es hacer una subconsulta que elige primero los ids de jobs de la página, y el JOIN externo recupera esos jobs con todas sus tecnologías
+    const jobConditions: string[] = []
+    const jobParams: any[] = []
+    let techCondition = ''
+    const techParams: string[] = []
 
     if (filters?.modality) {
-      conditions.push('j.modality = ?')
-      params.push(filters.modality)
+      jobConditions.push('modality = ?')
+      jobParams.push(filters.modality)
     }
     if (filters?.level) {
-      conditions.push('j.level = ?')
-      params.push(filters.level)
+      jobConditions.push('level = ?')
+      jobParams.push(filters.level)
     }
     if (filters?.tech) {
-      conditions.push('jt.technology = ?')
-      params.push(filters.tech)
+      techCondition = 'AND j.id IN (SELECT job_id FROM job_technologies WHERE technology = ?)'
+      techParams.push(filters.tech)
     }
 
     const limit = filters?.limit ?? 50
     const offset = filters?.offset ?? 0
-    params.push(limit, offset)
 
     const sql = `
       SELECT 
@@ -64,11 +67,17 @@ export class JobModel {
       FROM jobs j
       LEFT JOIN job_technologies jt ON j.id = jt.job_id
       LEFT JOIN job_content jc ON j.id = jc.job_id
-      WHERE ${conditions.join(' AND ')}
-      LIMIT ? OFFSET ?
+      WHERE j.id IN (
+        -- LIMIT/OFFSET van aquí para contar jobs (1 fila por job), no filas del JOIN
+        SELECT id FROM jobs
+        ${jobConditions.length ? 'WHERE ' + jobConditions.join(' AND ') : ''}
+        LIMIT ? OFFSET ?
+      )
+      ${techCondition}
     `
 
-    const rows = db.prepare(sql).all(...params)
+    // Los parámetros se pasan en el mismo orden en que aparecen los '?' en el SQL
+    const rows = db.prepare(sql).all(...jobParams, limit, offset, ...techParams)
     return this.mapRowsToJobs(rows)
   }
 
@@ -165,11 +174,19 @@ export class JobModel {
 
     // Actualizar contenido si viene en el input
     if (content !== undefined) {
+      // Con UPDATE normal falla si la fila no existe (por ejemplo un job creado sin content).
+      // Con UPSERT buscamos el id existente, y el INSERT lo crea o lo actualiza.
+      const existing = db.prepare('SELECT id FROM job_content WHERE job_id = ?').get(id) as { id: string } | undefined
+      const contentId = existing?.id ?? crypto.randomUUID()
       db.prepare(`
-        UPDATE job_content 
-        SET description = ?, responsibilities = ?, requirements = ?, about = ?
-        WHERE job_id = ?
-      `).run(content.description, content.responsibilities, content.requirements, content.about, id)
+        INSERT INTO job_content (id, job_id, description, responsibilities, requirements, about)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          description = excluded.description,
+          responsibilities = excluded.responsibilities,
+          requirements = excluded.requirements,
+          about = excluded.about
+      `).run(contentId, id, content.description, content.responsibilities, content.requirements, content.about)
     }
 
     return this.getById(id)
