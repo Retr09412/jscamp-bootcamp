@@ -1,11 +1,10 @@
-import db from './database'
-import fs from 'node:fs'
-import path from 'node:path'
 import crypto from 'node:crypto'
+import fs from 'node:fs'
+import db from './database'
 
 // Leer jobs.json
-import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const jobsPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'jobs.json')
 const jobs = JSON.parse(fs.readFileSync(jobsPath, 'utf-8'))
@@ -54,6 +53,9 @@ const insertContent = db.prepare(`
   INSERT INTO job_content (id, job_id, description, responsibilities, requirements, about)
   VALUES (?, ?, ?, ?, ?, ?)
 `)
+
+// Limpiar datos antes de insertar: si el seed corre 2 veces, el id repetido daría error de UNIQUE. Así que borramos primero las tablas hijas (por las foreign keys).
+db.exec('DELETE FROM job_technologies; DELETE FROM job_content; DELETE FROM jobs;')
 
 // Transaccion para insertar datos
 const seedTransaction = db.transaction((jobsData) => {
