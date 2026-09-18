@@ -424,6 +424,7 @@ footer article {
 
     main input{
       background-color: var(--card-bg);
+      color: var(--text-primary);
       width: 80vw;
       height: 3rem;
       border-radius: .5rem;
