@@ -1,5 +1,7 @@
 <!-- Aquí irá tu feedback -->
-Buen trabajo! Hicimos algunos cambios y agregamos algunas cosas que pedía la letra original. Todo está en los comentarios del código.
+Muy buen trabajo! Lo hiciste perfecto.
+El cron tenía un horario diferente pero no tenía que ser exactamente igual al de la letra, así que no lo tomo como un error.
 
-Cualquier duda, nos puedes preguntar en `dudas.md`.
-A seguir trabajando que queda muy poco!
+Vamos a dejarlo como completado, entregaste un trabajo con muy buena calidad.
+
+Un saludo y a seguir!
